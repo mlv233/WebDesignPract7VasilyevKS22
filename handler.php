@@ -1,14 +1,5 @@
 <?php
-    if (!file_exists('database')) {
-        mkdir("database");
-    }
-    if (!file_exists('public')) {
-        mkdir("public");
-    }
-    if (!file_exists('public/images')) {
-        mkdir("public/images");
-    }
-    
+    require 'db.php';
     require 'uploads.php';
 
     function isError() {
@@ -19,18 +10,17 @@
         return false;
     }
 
-    function addUser($path) {
-
-        if (!file_exists('database/users.csv')) {
-            file_put_contents('database/users.csv', '');
-        }
-
-        $fp = fopen('database/users.csv', 'a');
+    function addUser($path, $con) {
         $name = $_POST["name"];
         $email = $_POST["email"];
         $gender = $_POST["gender"];
-        fwrite($fp, "$name,$email,$gender,$path \n");
-        fclose($fp);
+
+        $sql = "INSERT INTO innodb (email, name, gender, password, path_to_img) VALUES ('$email', '$name','$gender', '11111', '$path')";
+        echo $sql;
+        $res = mysqli_query($con, $sql);
+        if ($res) {
+            $valid = true;
+        }
     }
 ?>
 
@@ -58,7 +48,7 @@ initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         echo "Email: " . $_POST["email"] . "<br>";
         echo "Gender: " . $_POST["gender"] . "<br>";
         echo "Image path: " . $filePath . "<br>";
-        addUser($filePath);
+        addUser($filePath, $conn);
     }?>
     <hr>
     <a class="btn" href="adduser.php">return back</a>

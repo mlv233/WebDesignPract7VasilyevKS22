@@ -1,13 +1,17 @@
 <?php
-$users_db = file("database/users.csv");
-$users = array();
-
-foreach ($users_db as $user_line) {
-    $user_arr = explode(",", $user_line);
-    array_push($users, ["name" => $user_arr[0],
-        "email" => $user_arr[1],
-        "gender" => $user_arr[2],
-        "path" => $user_arr[3]]);
+require 'db.php';
+$sql = "SELECT * FROM innodb";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+// output data of each row
+    while($row = $result->fetch_assoc()) {
+        $users[] = [
+            'name' => $row['name'],
+            'email' => $row['email'],
+            'gender' => $row['gender'],
+            'path'=>$row['path_to_img']
+        ];
+    }
 }
 ?>
 

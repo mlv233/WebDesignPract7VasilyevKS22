@@ -1,3 +1,11 @@
+<?php
+session_start();
+
+$isRestricted = false;
+if (isset($_SESSION['auth']) && $_SESSION['auth'] === true)
+    $isRestricted = true;
+?>
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -19,6 +27,7 @@ initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 </head>
 <body>
 <div class="container">
+    <?php if($isRestricted) : ?>
     <h3>Add New User</h3>
     <form action="handler.php" method="post" enctype="multipart/form-data">
         <div class="row">
@@ -58,6 +67,9 @@ initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
         </div>
         <input type="submit" class="btn" value="Add">
     </form>
+    <?php else:?>
+        <span>Content is restricted, please <a href="login.php">Login</a></span>
+    <?php endif;?>
 </div>
 </body>
 </html>
